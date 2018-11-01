@@ -4,13 +4,28 @@ contract StoreLottery {
 
     address owner;
     bool ownerWeath = false;
-    uint luckyNumber;
+    uint8 luckyNumber;
     uint lotteryCounter = 0;
 
-    constructor(uint startNumber) public {
-        require(msg.sender.balance > 99.999999 ether);
+    modifier minimunCost(uint min) {
+      require(msg.value >= min, "Insuficient Ether.");
+      _; // continue to run remaing function code
+    }
 
-        luckyNumber = startNumber;
+    modifier lowLuckyNumber(uint _luckyNumber) {
+      require(_luckyNumber == uint8(_luckyNumber), "lucky number does not fit on global type uint8.");
+      _;
+    }
+
+    modifier lowBalance() {
+      require(msg.sender.balance > 99 ether, "deployer does not have more then 99 ether.");
+      _;
+    }
+
+    event changeEvent(address payer, uint change);
+
+    constructor(uint256 _luckyNumber) public lowLuckyNumber(_luckyNumber) lowBalance() {
+        luckyNumber = uint8(_luckyNumber);
         owner = msg.sender;
         lotteryCounter = 1;
         if (msg.sender.balance > 20 ether) {
@@ -20,15 +35,8 @@ contract StoreLottery {
         }
     }
 
-    modifier minimunCost(uint min) {
-      require(msg.value >= min, "Insuficient Ether.");
-      _; // continue to run remaing function code
-    }
-
-    event changeEvent(address payer, uint change);
-
-    function set(uint sent) public payable minimunCost(1000) {
-        luckyNumber = sent;
+    function set(uint256 _luckyNumber) public payable minimunCost(1000) lowLuckyNumber(_luckyNumber) {
+        luckyNumber = uint8(_luckyNumber);
         lotteryCounter++;
 
         if (msg.value > 1000) {
