@@ -7,19 +7,24 @@ contract StoreLottery {
     uint8 luckyNumber;
     uint lotteryCounter = 0;
 
+    modifier isOwner() {
+      require(msg.sender == owner, "It''s required to be the contract owner to perform this execution.");
+      _; // continue to run remaing function code
+    }
+
     modifier minimunCost(uint min) {
       require(msg.value >= min, "Insuficient Ether.");
       _; // continue to run remaing function code
     }
 
     modifier lowLuckyNumber(uint _luckyNumber) {
-      require(_luckyNumber == uint8(_luckyNumber), "lucky number does not fit on global type uint8.");
-      _;
+      require(_luckyNumber == uint8(_luckyNumber), "Lucky number does not fit on global type uint8.");
+      _; // continue to run remaing function code
     }
 
     modifier lowBalance() {
-      require(msg.sender.balance > 99 ether, "deployer does not have more then 99 ether.");
-      _;
+      require(msg.sender.balance > 99 ether, "Deployer does not have more then 99 ether.");
+      _; // continue to run remaing function code
     }
 
     event changeEvent(address payer, uint change);
@@ -35,7 +40,7 @@ contract StoreLottery {
         }
     }
 
-    function set(uint256 _luckyNumber) public payable minimunCost(1000) lowLuckyNumber(_luckyNumber) {
+    function set(uint256 _luckyNumber) public payable isOwner() minimunCost(1000) lowLuckyNumber(_luckyNumber) {
         luckyNumber = uint8(_luckyNumber);
         lotteryCounter++;
 
@@ -46,7 +51,14 @@ contract StoreLottery {
         }
     }
 
-    function get() public view returns (uint) {
+    function get() public view returns (uint8 _luckyNumber, uint _lotteryCounter, address _contract, uint balance) {
+        return (luckyNumber,
+                lotteryCounter,
+                this,
+                address(this).balance);
+    }
+
+    function getLuckyNumber() public view returns (uint8) {
         return luckyNumber;
     }
 
@@ -54,11 +66,11 @@ contract StoreLottery {
         return lotteryCounter;
     }
 
-    function getOwner() public view returns (address) {
+    function getOwner() public view isOwner() returns (address) {
         return owner;
     }
 
-    function getWealth() public view returns (bool) {
+    function getWealth() public view isOwner() returns (bool) {
         return ownerWeath;
     }
 }

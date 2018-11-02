@@ -28,7 +28,6 @@ function (<parameter types>) {(visibility) internal|external}
 
 ## Modifiers
 
-* pure: can't change state;
-* view: can't change state;
-* payable: can receive ether;
-* constant: can't store info.
+* constant/view: Use the global variable and access within the function only. Scope only within the function;
+* pure: Only access local variable do not access the global variable;
+* payable: Modify the global variable (or) rewritte the global variable. Scope outside function used.
