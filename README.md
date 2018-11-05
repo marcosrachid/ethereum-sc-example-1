@@ -30,7 +30,7 @@ value[2];
 ```
 * struct: definition of new types(similar to objects from classes, but always public atributes and no methods). Can be arrays or mappings. Ex:
 ```
-strunct Lottery {
+struct Lottery {
   uint data;
   uint luckyNumber;
   address sender;
@@ -38,6 +38,14 @@ strunct Lottery {
 ...
 Lottery[] lotteries;
 lotteries[0].luckyNumber = 1234;
+```
+* mappings: key x value type with an arbitrary key to reference an specific value. Ex:
+```
+mapping(address => uint) balances;
+
+function update(uint balance) public {
+  balances[msg.sender] = balance;
+}
 ```
 
 ## Ether Units
