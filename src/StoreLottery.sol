@@ -3,12 +3,13 @@ pragma solidity ^0.4.0;
 contract StoreLottery {
 
     address owner;
-    bool ownerWeath = false;
-    uint8 luckyNumber;
     uint lotteryCounter = 0;
 
+    uint8 luckyNumber = 0;
+    uint8[] luckyNumbers;
+
     modifier isOwner() {
-      require(msg.sender == owner, "It''s required to be the contract owner to perform this execution.");
+      require(msg.sender == owner, "It's required to be the contract owner to perform this execution.");
       _; // continue to run remaing function code
     }
 
@@ -29,19 +30,14 @@ contract StoreLottery {
 
     event changeEvent(address payer, uint change);
 
-    constructor(uint256 _luckyNumber) public lowLuckyNumber(_luckyNumber) lowBalance() {
-        luckyNumber = uint8(_luckyNumber);
+    constructor(uint256 _luckyNumber) public payable lowLuckyNumber(_luckyNumber) lowBalance() {
         owner = msg.sender;
-        lotteryCounter = 1;
-        if (msg.sender.balance > 20 ether) {
-            ownerWeath = true;
-        } else {
-            ownerWeath = false;
-        }
+        set(_luckyNumber);
     }
 
     function set(uint256 _luckyNumber) public payable isOwner() minimunCost(1000) lowLuckyNumber(_luckyNumber) {
         luckyNumber = uint8(_luckyNumber);
+        luckyNumbers.push(luckyNumber);
         lotteryCounter++;
 
         if (msg.value > 1000) {
@@ -51,11 +47,13 @@ contract StoreLottery {
         }
     }
 
-    function get() public view returns (uint8 _luckyNumber, uint _lotteryCounter, address _contract, uint balance) {
-        return (luckyNumber,
+    function get() public view returns (address _owner, uint8 _luckyNumber, uint _lotteryCounter, uint balance, uint8[] _luckyNumbers) {
+        return (owner,
+                luckyNumber,
                 lotteryCounter,
-                this,
-                address(this).balance);
+                address(this).balance,
+                luckyNumbers
+                );
     }
 
     function getLuckyNumber() public view returns (uint8) {
@@ -70,7 +68,7 @@ contract StoreLottery {
         return owner;
     }
 
-    function getWealth() public view isOwner() returns (bool) {
-        return ownerWeath;
+    function kill() public isOwner() {
+        selfdestruct(owner);
     }
 }
