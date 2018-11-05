@@ -3,10 +3,14 @@ pragma solidity ^0.4.0;
 contract StoreLottery {
 
     address owner;
-    uint lotteryCounter = 0;
 
-    uint8 luckyNumber = 0;
-    uint8[] luckyNumbers;
+    struct Lottery {
+      uint date;
+      uint8 luckyNumber;
+      address sender;
+    }
+
+    Lottery[] lotteries;
 
     modifier isOwner() {
       require(msg.sender == owner, "It's required to be the contract owner to perform this execution.");
@@ -36,9 +40,11 @@ contract StoreLottery {
     }
 
     function set(uint256 _luckyNumber) public payable isOwner() minimunCost(1000) lowLuckyNumber(_luckyNumber) {
-        luckyNumber = uint8(_luckyNumber);
-        luckyNumbers.push(luckyNumber);
-        lotteryCounter++;
+        lotteries.push(Lottery({
+          date: now,
+          luckyNumber: uint8(_luckyNumber),
+          sender: msg.sender
+        }));
 
         if (msg.value > 1000) {
           uint change = msg.value - 1000;
@@ -47,21 +53,22 @@ contract StoreLottery {
         }
     }
 
-    function get() public view returns (address _owner, uint8 _luckyNumber, uint _lotteryCounter, uint balance, uint8[] _luckyNumbers) {
-        return (owner,
-                luckyNumber,
-                lotteryCounter,
+    function get() public view returns (address _owner, uint _balance, uint _lastDate, uint8 _lastLuckyNumber, address _lastSender) {
+        return (
+                owner,
                 address(this).balance,
-                luckyNumbers
-                );
+                lotteries[lotteries.length - 1].date,
+                lotteries[lotteries.length - 1].luckyNumber,
+                lotteries[lotteries.length - 1].sender
+        );
     }
 
-    function getLuckyNumber() public view returns (uint8) {
-        return luckyNumber;
+    function getLastLuckyNumber() public view returns (uint8) {
+        return lotteries[lotteries.length - 1].luckyNumber;
     }
 
     function getCounter() public view returns (uint) {
-        return lotteryCounter;
+        return lotteries.length;
     }
 
     function getOwner() public view returns (address) {
