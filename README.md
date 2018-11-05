@@ -28,6 +28,17 @@ value[0];
 value[1];
 value[2];
 ```
+* struct: definition of new types(similar to objects from classes, but always public atributes and no methods). Can be arrays or mappings. Ex:
+```
+strunct Lottery {
+  uint data;
+  uint luckyNumber;
+  address sender;
+}
+...
+Lottery[] lotteries;
+lotteries[0].luckyNumber = 1234;
+```
 
 ## Ether Units
 
