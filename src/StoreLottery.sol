@@ -64,7 +64,7 @@ contract StoreLottery {
         return lotteryCounter;
     }
 
-    function getOwner() public view isOwner() returns (address) {
+    function getOwner() public view returns (address) {
         return owner;
     }
 
