@@ -19,7 +19,15 @@ function (<parameter types>) {(visibility) internal|external}
   * balance: get account current balance;
   * transfer: account receives an amount;
   * call:  is a low-level interface for sending a message to a contract. It returns false if the subcall encounters an exception, otherwise it returns true(use not recommended);
-* string: text variable set between double quotes.
+* string: text variable set between double quotes
+* arrays: declare arrays with type or struct declaration before "[]". To get any value within an array you need to declare variable with an index. Ex:
+```
+uint[] value;
+
+value[0];
+value[1];
+value[2];
+```
 
 ## Ether Units
 
