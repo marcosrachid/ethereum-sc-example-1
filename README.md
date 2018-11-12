@@ -88,3 +88,13 @@ Link  | <https://solidity.readthedocs.io/en/v0.4.25/units-and-global-variables.h
 * constant/view: Use the global variable and access within the function only. Scope only within the function;
 * pure: Only access local variable do not access the global variable;
 * payable: Modify the global variable (or) rewritte the global variable. Scope outside function used.
+
+## Source
+
+Source  | Data
+------------- | -------------
+Author  | ECOA PUCRIO
+Instructor I | Rafael Nasser
+Instructor II | Ronnie Paskin
+Class  | Contratos Inteligentes: Programação Solidity para Ethereum
+Link  | <https://www.udemy.com/curso-completo-do-desenvolvedor-nodejs>
