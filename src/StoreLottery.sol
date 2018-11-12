@@ -46,7 +46,7 @@ contract StoreLottery {
     }
 
     /**
-      *
+      * deploy contructor
       *
       **/
     constructor(string _name) public {
@@ -60,7 +60,7 @@ contract StoreLottery {
     event ChangeEvent(address payer, uint change);
     event ShotRegistered(address sender, uint8 shot);
     /**
-      *
+      * register a shot from sender if it doesn't exist
       *
       **/
     function sendShot(uint _luckyNumber) public payable isNotOwner() minimunCost(1000) lowLuckyNumber(_luckyNumber) {
@@ -78,7 +78,7 @@ contract StoreLottery {
     }
 
     /**
-      *
+      * Show the sender shot if exists
       *
       **/
     function checkShot() public view returns(uint8 luckyNumber) {
@@ -88,7 +88,7 @@ contract StoreLottery {
     }
 
     /**
-      *
+      * Return the number of shots/shooters for current lottery
       *
       **/
     function countShots() view public returns(uint count) {
@@ -98,7 +98,8 @@ contract StoreLottery {
     event LotteryPosted(uint8 result);
     event PrizesSent(uint totalPrize, uint individualPrize);
     /**
-      *
+      * Lottery to find randomly a number and define the lottery winners and finally delete
+      * shots and shooters from arrays to initiate a new lottery
       *
       **/
     function startLottery() public isOwner() returns(uint8 _luckyNumber) {
@@ -139,6 +140,10 @@ contract StoreLottery {
       return luckyNumber;
     }
 
+    /**
+      * Contract destruction
+      *
+      **/
     function kill() public isOwner() {
         constants.owner.transfer(address(this).balance);
         selfdestruct(constants.owner);

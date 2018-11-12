@@ -2,6 +2,11 @@ pragma solidity ^0.4.0;
 
 library StringUtils {
 
+  /**
+    * static function that receives an uint and returns its string
+    * representation
+    *
+    **/
   function uint2str(uint i) internal pure returns (string){
       if (i == 0) return "0";
       uint j = i;
