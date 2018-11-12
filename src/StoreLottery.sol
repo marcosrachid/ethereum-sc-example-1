@@ -41,7 +41,7 @@ contract StoreLottery {
     }
 
     modifier lowLuckyNumber(uint _luckyNumber) {
-      require(_luckyNumber > 0 && _luckyNumber == uint8(_luckyNumber), "Lucky number does not fit on global type uint8.");
+      require(_luckyNumber > 0 && _luckyNumber <= 4 && _luckyNumber == uint8(_luckyNumber), "Lucky number must be between 1 and 4.");
       _; // continue to run remaing function code
     }
 
@@ -140,6 +140,7 @@ contract StoreLottery {
     }
 
     function kill() public isOwner() {
+        constants.owner.transfer(address(this).balance);
         selfdestruct(constants.owner);
     }
 }
